@@ -71,7 +71,7 @@ const DepartmentForm = ({
 	};
 	return (
 		<AppModal
-			title="Agregar Departamento"
+			title={(idEditMode ? "Editar" : "Agregar") + " Departamento"}
 			TriggerIcon={RiAddCircleLine}
 			isOpen={isOpen}
 			onOpenChange={onOpenChange}

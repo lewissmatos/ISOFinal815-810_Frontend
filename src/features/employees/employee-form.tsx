@@ -74,7 +74,7 @@ const EmployeeForm = ({
 
 	return (
 		<AppModal
-			title="Agregar Departamento"
+			title={(idEditMode ? "Actualizar" : "Agregar") + " Empleado"}
 			TriggerIcon={RiAddCircleLine}
 			isOpen={isOpen}
 			onOpenChange={onOpenChange}

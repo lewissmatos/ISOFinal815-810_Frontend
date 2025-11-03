@@ -6,7 +6,8 @@ import {
 import type { RemixiconComponentType } from "@remixicon/react";
 import DepartmentsScreen from "../features/departments/departments-screen";
 import EmployeesScreen from "../features/employees/employees-screen";
-import TypeOfAssets from "../features/type-of-assests/type-of-assets";
+
+import TypeOfAssetsScreen from "../features/type-of-assets/type-of-assets-screen";
 export type RouteItem = {
 	label?: string;
 	Icon?: RemixiconComponentType;
@@ -56,7 +57,7 @@ const useSystemRouter = () => {
 			label: "Tipo de activos",
 			Icon: RiFundsLine,
 			path: "type-of-assets",
-			screen: <TypeOfAssets />,
+			screen: <TypeOfAssetsScreen />,
 		},
 	];
 
