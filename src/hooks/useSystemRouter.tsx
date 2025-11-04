@@ -1,6 +1,7 @@
 import {
 	RiAccountBoxLine,
 	RiBuilding2Line,
+	RiCalculatorLine,
 	RiFundsLine,
 	RiMoneyDollarCircleLine,
 } from "@remixicon/react";
@@ -10,6 +11,7 @@ import EmployeesScreen from "../features/employees/employees-screen";
 
 import TypeOfAssetsScreen from "../features/type-of-assets/type-of-assets-screen";
 import FixedAssetsScreen from "../features/fixed-assets/fixed-assets-screen";
+import AccountingEntriesScreen from "../features/accounting-entries/accounting-entries-screen";
 export type RouteItem = {
 	label?: string;
 	Icon?: RemixiconComponentType;
@@ -65,6 +67,12 @@ const useSystemRouter = () => {
 			Icon: RiMoneyDollarCircleLine,
 			path: "fixed-assets",
 			screen: <FixedAssetsScreen />,
+		},
+		{
+			label: "Asientos Contables",
+			Icon: RiCalculatorLine,
+			path: "accounting-entries",
+			screen: <AccountingEntriesScreen />,
 		},
 	];
 

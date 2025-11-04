@@ -3,6 +3,7 @@ import { ScreenLayout } from "../../components/ui/screen-layout";
 import ScreenTitle from "../../components/ui/screen-title";
 import AppTable from "../../components/ui/app-table";
 import {
+	RiCalculatorLine,
 	RiCheckboxCircleLine,
 	RiEditLine,
 	RiForbidLine,
@@ -18,6 +19,8 @@ import {
 import { useFetchFixedAssets } from "../../api/fixed-assets/queries";
 import { differenceInMonths, formatDate } from "date-fns";
 import { parseDate } from "@internationalized/date";
+import { useExecuteDepreciationProcess } from "../../api/accounting-entries/mutations";
+import DepreciationsDetails from "./depreciations-details";
 
 const FixedAssetsScreen = () => {
 	const { data: fixedAssetsData, isFetching } = useFetchFixedAssets();
@@ -37,6 +40,11 @@ const FixedAssetsScreen = () => {
 
 	const { mutateAsync: onDelete, isPending: isDeleting } =
 		useDeleteFixedAsset();
+
+	const {
+		mutateAsync: onExecuteDepreciation,
+		isPending: isExecutingDepreciation,
+	} = useExecuteDepreciationProcess();
 
 	const columns = [
 		{
@@ -111,11 +119,7 @@ const FixedAssetsScreen = () => {
 		},
 		{
 			headerLabel: "Depreciación Acumulada",
-			selector: (row: FixedAsset) =>
-				row.accumulatedDepreciation.toLocaleString("es-DO", {
-					style: "currency",
-					currency: "DOP",
-				}),
+			selector: (row: FixedAsset) => <DepreciationsDetails fixedAsset={row} />,
 		},
 		{
 			headerLabel: "Estado",
@@ -133,7 +137,15 @@ const FixedAssetsScreen = () => {
 					>
 						<RiEditLine size={18} />
 					</Button>
-
+					<Button
+						isIconOnly
+						size="sm"
+						variant="light"
+						onPress={() => onExecuteDepreciation(row?.id)}
+						isLoading={isExecutingDepreciation || isFetching}
+					>
+						<RiCalculatorLine size={18} />
+					</Button>
 					<Button
 						isIconOnly
 						size="sm"
@@ -163,7 +175,7 @@ const FixedAssetsScreen = () => {
 	return (
 		<ScreenLayout>
 			<div className="flex items-center w-full justify-between mb-4">
-				<ScreenTitle>Tipos de Activos</ScreenTitle>
+				<ScreenTitle>Activos Fijos</ScreenTitle>
 				<FixedAssetForm
 					fixedAssetToEdit={fixedAssetToEdit}
 					isOpen={isOpen}

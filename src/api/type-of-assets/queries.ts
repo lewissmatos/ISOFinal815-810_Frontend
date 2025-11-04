@@ -5,7 +5,6 @@ import { fetchTypeOfAssets } from "./services";
 
 export const useFetchTypeOfAssets = (options?: Partial<UseQueryOptions>) => {
 	const { enabled = true } = options || {};
-	console.log(enabled);
 	const data = useQuery<ServiceResponse<TypeOfAsset[]>>({
 		queryKey: ["type-of-assets"],
 		queryFn: fetchTypeOfAssets,
