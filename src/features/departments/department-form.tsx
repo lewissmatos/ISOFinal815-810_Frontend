@@ -47,7 +47,7 @@ const DepartmentForm = ({
 		});
 	}, [departmentToEdit, isOpen, reset]);
 
-	const idEditMode = Boolean(departmentToEdit?.id);
+	const isEditMode = Boolean(departmentToEdit?.id);
 
 	const { mutateAsync: onAddDepartment, isPending: isAdding } =
 		useAddDepartment();
@@ -61,7 +61,7 @@ const DepartmentForm = ({
 	};
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
-		await (idEditMode
+		await (isEditMode
 			? onUpdateDepartment({
 					departmentId: departmentToEdit!.id,
 					...data,
@@ -71,7 +71,7 @@ const DepartmentForm = ({
 	};
 	return (
 		<AppModal
-			title={(idEditMode ? "Editar" : "Agregar") + " Departamento"}
+			title={(isEditMode ? "Editar" : "Agregar") + " Departamento"}
 			TriggerIcon={RiAddCircleLine}
 			isOpen={isOpen}
 			onOpenChange={onOpenChange}
@@ -136,7 +136,7 @@ const DepartmentForm = ({
 							isLoading={isAdding || isUpdating}
 							endContent={<RiCheckboxCircleLine size={18} />}
 						>
-							{(idEditMode ? "Actualizar" : "Agregar") + " Departamento"}
+							{(isEditMode ? "Actualizar" : "Agregar") + " Departamento"}
 						</Button>
 					</div>
 				</div>

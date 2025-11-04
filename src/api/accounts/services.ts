@@ -6,3 +6,10 @@ export const fetchAccounts = async (): Promise<ServiceResponse<Account[]>> => {
 	const response = await client.get("/accounts");
 	return response.data;
 };
+
+export const fetchActiveAccounts = async (): Promise<
+	ServiceResponse<Account[]>
+> => {
+	const response = await client.get("/accounts/active");
+	return response.data;
+};

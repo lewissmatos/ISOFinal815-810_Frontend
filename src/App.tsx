@@ -3,9 +3,15 @@ import "./App.scss";
 import { BrowserRouter } from "react-router-dom";
 import AuthenticatedRoutes from "./router/authenticated-routes";
 import UnauthenticatedRoutes from "./router/unauthenticated-routes";
-
+import { setDefaultOptions } from "date-fns";
+import { es } from "date-fns/locale";
 function App() {
 	const isAuthenticated = true;
+
+	setDefaultOptions({
+		locale: es,
+		weekStartsOn: 1,
+	});
 	return (
 		<BrowserRouter basename={import.meta.env.VITE_REACT_APP_URL_BASE}>
 			<HeroUIProvider>

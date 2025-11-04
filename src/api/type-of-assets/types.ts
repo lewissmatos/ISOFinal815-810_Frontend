@@ -3,8 +3,8 @@ import type { Base } from "../types";
 
 type TypeOfAsset = Base<{
 	description: string;
-	buyingAccount: Account;
-	buyingAccountId: number;
+	purchaseAccount: Account;
+	purchaseAccountId: number;
 	depreciationAccount: Account;
 	depreciationAccountId: number;
 }>;

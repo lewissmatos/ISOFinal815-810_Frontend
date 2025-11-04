@@ -58,7 +58,7 @@ const EmployeesScreen = () => {
 			selector: (row: Employee) => row.kindOfPerson,
 		},
 		{
-			headerLabel: "Fecha de Ingreso",
+			headerLabel: "Fecha de Entrada",
 			selector: (row: Employee) =>
 				row.enrollmentDate
 					? formatDate(parseDate(row.enrollmentDate).toDate("AST"), "P")

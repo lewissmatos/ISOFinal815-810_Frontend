@@ -44,7 +44,7 @@ const TypeOfAssetsScreen = () => {
 		},
 		{
 			headerLabel: "Cuenta de Compra",
-			selector: (row: TypeOfAsset) => row.buyingAccount?.description,
+			selector: (row: TypeOfAsset) => row.purchaseAccount?.description,
 		},
 		{
 			headerLabel: "Cuenta de Depreciación",
@@ -96,7 +96,7 @@ const TypeOfAssetsScreen = () => {
 	return (
 		<ScreenLayout>
 			<div className="flex items-center w-full justify-between mb-4">
-				<ScreenTitle>Tipo de Activos</ScreenTitle>
+				<ScreenTitle>Tipos de Activos</ScreenTitle>
 				<TypeOfAssetForm
 					typeOfAssetToEdit={typeOfAssetToEdit}
 					isOpen={isOpen}

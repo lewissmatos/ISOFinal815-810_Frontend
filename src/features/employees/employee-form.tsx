@@ -36,7 +36,10 @@ const EmployeeForm = ({
 	});
 
 	const { data: departmentsData, isFetching: isFetchingDepartments } =
-		useFetchDepartments();
+		useFetchDepartments({
+			enabled: isOpen,
+			showInactive: false,
+		});
 
 	useEffect(() => {
 		reset({
@@ -50,7 +53,7 @@ const EmployeeForm = ({
 		});
 	}, [employeeToEdit, isOpen, reset]);
 
-	const idEditMode = Boolean(employeeToEdit?.id);
+	const isEditMode = Boolean(employeeToEdit?.id);
 
 	const { mutateAsync: onAddEmployee, isPending: isAdding } = useAddEmployee();
 
@@ -63,7 +66,7 @@ const EmployeeForm = ({
 	};
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
-		await (idEditMode
+		await (isEditMode
 			? onUpdateEmployee({
 					employeeId: employeeToEdit!.id,
 					...data,
@@ -74,7 +77,7 @@ const EmployeeForm = ({
 
 	return (
 		<AppModal
-			title={(idEditMode ? "Actualizar" : "Agregar") + " Empleado"}
+			title={(isEditMode ? "Actualizar" : "Agregar") + " Empleado"}
 			TriggerIcon={RiAddCircleLine}
 			isOpen={isOpen}
 			onOpenChange={onOpenChange}
@@ -106,7 +109,6 @@ const EmployeeForm = ({
 						{...register("cedula", {
 							required: true,
 							maxLength: 11,
-							// Validate that the cedula contains only numbers, no dashes
 							validate: (value) => /^\d+$/.test(value || ""),
 						})}
 						label="Cédula (sin guiones)"
@@ -139,7 +141,7 @@ const EmployeeForm = ({
 								: new Set()
 						}
 						onSelectionChange={(value) => {
-							const kindOfPerson = [...value][0].toString();
+							const kindOfPerson = [...value][0]?.toString();
 							setValue("kindOfPerson", kindOfPerson as KindOfPerson);
 						}}
 					>
@@ -167,7 +169,7 @@ const EmployeeForm = ({
 					<Select
 						label="Departamento"
 						labelPlacement="outside"
-						placeholder="Seleccione un gerente"
+						placeholder="Seleccione un departamento"
 						isLoading={isFetchingDepartments}
 						{...register("departmentId", { required: true })}
 						isRequired
@@ -178,7 +180,7 @@ const EmployeeForm = ({
 								: new Set()
 						}
 						onSelectionChange={(value) => {
-							const departmentId = [...value][0].toString();
+							const departmentId = [...value][0]?.toString();
 							const department = departmentsData?.data.find(
 								(dept) => dept.id === Number(departmentId)
 							);
@@ -203,7 +205,7 @@ const EmployeeForm = ({
 							isLoading={isAdding || isUpdating}
 							endContent={<RiCheckboxCircleLine size={18} />}
 						>
-							{(idEditMode ? "Actualizar" : "Agregar") + " Departamento"}
+							{(isEditMode ? "Actualizar" : "Agregar") + " Departamento"}
 						</Button>
 					</div>
 				</div>

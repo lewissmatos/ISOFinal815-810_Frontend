@@ -9,6 +9,13 @@ export const fetchEmployees = async (): Promise<
 	return response.data;
 };
 
+export const fetchActiveEmployees = async (): Promise<
+	ServiceResponse<Employee[]>
+> => {
+	const response = await client.get("/employees/active");
+	return response.data;
+};
+
 export const createEmployee = async (
 	data: Omit<Employee, "id">
 ): Promise<ServiceResponse<Employee>> => {

@@ -9,6 +9,13 @@ export const fetchDepartments = async (): Promise<
 	return response.data;
 };
 
+export const fetchActiveDepartments = async (): Promise<
+	ServiceResponse<Department[]>
+> => {
+	const response = await client.get("/departments/active");
+	return response.data;
+};
+
 export const createDepartment = async (
 	payload?: Partial<Omit<Department, "id">>
 ): Promise<ServiceResponse<Department>> => {

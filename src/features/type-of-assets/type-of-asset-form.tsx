@@ -36,17 +36,17 @@ const TypeOfAssetForm = ({
 		reset({
 			description: typeOfAssetToEdit?.description || "",
 			depreciationAccount: typeOfAssetToEdit?.depreciationAccount,
-			buyingAccount: typeOfAssetToEdit?.buyingAccount,
-			buyingAccountId:
-				typeOfAssetToEdit?.buyingAccount?.id ||
-				typeOfAssetToEdit?.buyingAccountId,
+			purchaseAccount: typeOfAssetToEdit?.purchaseAccount,
+			purchaseAccountId:
+				typeOfAssetToEdit?.purchaseAccount?.id ||
+				typeOfAssetToEdit?.purchaseAccountId,
 			depreciationAccountId:
 				typeOfAssetToEdit?.depreciationAccount?.id ||
 				typeOfAssetToEdit?.depreciationAccountId,
 		});
 	}, [typeOfAssetToEdit, isOpen, reset]);
 
-	const idEditMode = Boolean(typeOfAssetToEdit?.id);
+	const isEditMode = Boolean(typeOfAssetToEdit?.id);
 
 	const { mutateAsync: onAddTypeOfAsset, isPending: isAdding } =
 		useAddTypeOfAsset();
@@ -60,7 +60,7 @@ const TypeOfAssetForm = ({
 	};
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
-		await (idEditMode
+		await (isEditMode
 			? onUpdateTypeOfAsset({
 					typeOfAssetId: typeOfAssetToEdit!.id,
 					...data,
@@ -71,7 +71,7 @@ const TypeOfAssetForm = ({
 
 	return (
 		<AppModal
-			title={(idEditMode ? "Editar" : "Agregar") + " Tipo de Activo"}
+			title={(isEditMode ? "Editar" : "Agregar") + " Tipo de Activo"}
 			TriggerIcon={RiAddCircleLine}
 			isOpen={isOpen}
 			onOpenChange={onOpenChange}
@@ -90,69 +90,27 @@ const TypeOfAssetForm = ({
 							}
 						}}
 						{...register("description", { required: true })}
-						label="Nombre"
+						label="Descripción"
 						labelPlacement="outside-top"
 					/>
 
-					<Select
-						label="Cuenta de Compra"
-						labelPlacement="outside"
-						placeholder="Seleccione una cuenta"
-						isLoading={isFetchingAccounts}
-						{...register("buyingAccountId", { required: true })}
-						isRequired
-						disallowEmptySelection
-						selectedKeys={
-							watch("buyingAccountId")
-								? new Set([watch("buyingAccountId")!.toString()])
-								: new Set()
-						}
-						onSelectionChange={(value) => {
-							const accountId = [...value][0].toString();
-							const account = accountsData?.data.find(
-								(acc) => acc.id === Number(accountId)
-							);
-							if (!account) return;
-							setValue("buyingAccountId", Number(accountId));
-							setValue("buyingAccount", account);
-						}}
-					>
-						{
-							accountsData?.data.map((account) => (
-								<SelectItem key={account.id}>{account.description}</SelectItem>
-							)) as []
-						}
-					</Select>
+					<AccountSelector
+						isFetchingAccounts={isFetchingAccounts}
+						accountsData={accountsData}
+						register={register}
+						watch={watch}
+						setValue={setValue}
+						property="purchaseAccountId"
+					/>
 
-					<Select
-						label="Cuenta de Depreciación"
-						labelPlacement="outside"
-						placeholder="Seleccione una cuenta"
-						isLoading={isFetchingAccounts}
-						{...register("depreciationAccountId", { required: true })}
-						isRequired
-						disallowEmptySelection
-						selectedKeys={
-							watch("depreciationAccountId")
-								? new Set([watch("depreciationAccountId")!.toString()])
-								: new Set()
-						}
-						onSelectionChange={(value) => {
-							const accountId = [...value][0].toString();
-							const account = accountsData?.data.find(
-								(acc) => acc.id === Number(accountId)
-							);
-							if (!account) return;
-							setValue("depreciationAccountId", Number(accountId));
-							setValue("depreciationAccount", account);
-						}}
-					>
-						{
-							accountsData?.data.map((account) => (
-								<SelectItem key={account.id}>{account.description}</SelectItem>
-							)) as []
-						}
-					</Select>
+					<AccountSelector
+						isFetchingAccounts={isFetchingAccounts}
+						accountsData={accountsData}
+						register={register}
+						watch={watch}
+						setValue={setValue}
+						property="depreciationAccountId"
+					/>
 
 					<div className="flex justify-end">
 						<Button
@@ -161,12 +119,71 @@ const TypeOfAssetForm = ({
 							isLoading={isAdding || isUpdating}
 							endContent={<RiCheckboxCircleLine size={18} />}
 						>
-							{(idEditMode ? "Actualizar" : "Agregar") + " Departamento"}
+							{(isEditMode ? "Actualizar" : "Agregar") + " Departamento"}
 						</Button>
 					</div>
 				</div>
 			</Form>
 		</AppModal>
+	);
+};
+
+type AccountSelectorProps = {
+	isFetchingAccounts: boolean;
+	accountsData:
+		| {
+				data: {
+					id: number;
+					description: string;
+				}[];
+		  }
+		| undefined;
+	register: ReturnType<typeof useForm>["register"];
+	watch: ReturnType<typeof useForm>["watch"];
+	setValue: ReturnType<typeof useForm>["setValue"];
+	property: "purchaseAccountId" | "depreciationAccountId";
+};
+const AccountSelector = ({
+	isFetchingAccounts,
+	accountsData,
+	register,
+	watch,
+	setValue,
+	property,
+}: AccountSelectorProps) => {
+	return (
+		<Select
+			label={
+				"Cuenta de " +
+				(property === "purchaseAccountId" ? "Compra" : "Depreciación")
+			}
+			labelPlacement="outside"
+			placeholder="Seleccione una cuenta"
+			isLoading={isFetchingAccounts}
+			{...register(property, { required: true })}
+			isRequired
+			disallowEmptySelection
+			selectedKeys={
+				watch(property) ? new Set([watch(property)!.toString()]) : new Set()
+			}
+			onSelectionChange={(value) => {
+				const accountId = [...value][0]?.toString();
+				const account = accountsData?.data.find(
+					(acc) => acc.id === Number(accountId)
+				);
+				if (!account) return;
+				setValue(property, Number(accountId));
+				setValue(property.replace("Id", ""), account);
+			}}
+		>
+			{
+				accountsData?.data.map((account) => (
+					<SelectItem key={account.id}>
+						{`${account.id} - ${account.description}`}
+					</SelectItem>
+				)) as []
+			}
+		</Select>
 	);
 };
 
