@@ -1,11 +1,16 @@
-type Account = {
+import type { AccountType } from "../account-types/types";
+import type { Base } from "../types";
+
+type Account = Base<{
 	id: number;
 	description: string;
 	allowsMovement: "S" | "N";
-	type: number;
+	accountType?: AccountType;
+	accountTypeId: number;
 	level: number;
 	balance: number;
-	parentAccountCode?: number | null;
-};
+	parentAccount?: Account;
+	parentAccountId?: number;
+}>;
 
 export type { Account };

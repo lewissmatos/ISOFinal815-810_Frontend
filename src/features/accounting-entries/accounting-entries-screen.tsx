@@ -3,6 +3,10 @@ import ScreenTitle from "../../components/ui/screen-title";
 import AppTable from "../../components/ui/app-table";
 import { useFetchAccountingEntries } from "../../api/accounting-entries/queries";
 import type { AccountingEntry } from "../../api/accounting-entries/types";
+import { formatDate } from "date-fns";
+import { parseDate } from "@internationalized/date";
+import { formatCurrency } from "../../utils/ui.util";
+import AccountingEntryForm from "./accounting-entry-form";
 
 const AccountingEntriesScreen = () => {
 	const { data: accountingEntriesData, isFetching } =
@@ -16,66 +20,43 @@ const AccountingEntriesScreen = () => {
 			),
 		},
 		{
+			headerLabel: "Sistema Auxiliar",
+			selector: (row: AccountingEntry) => row?.auxiliary?.name,
+		},
+		{
 			headerLabel: "Cuenta",
 			selector: (row: AccountingEntry) => row?.account?.description,
 		},
 		{
-			headerLabel: "Cálculo de Depreciación",
-			selector: (row: AccountingEntry) =>
-				row.depreciationCalculation.depreciatedAmount.toLocaleString("es-DO", {
-					style: "currency",
-					currency: "DOP",
-				}),
+			headerLabel: "Tipo de Movimiento",
+			selector: (row: AccountingEntry) => row.movementType,
 		},
-
-		// {
-		// 	headerLabel: "Vida Útil",
-		// 	selector: (row: AccountingEntry) => {
-		// 		const entryDate = row.entryDate
-		// 			? parseDate(row.entryDate).toDate("AST")
-		// 			: new Date();
-		// 		const currentDate = new Date();
-
-		// 		const monthsUsed =
-		// 			differenceInMonths(currentDate, entryDate) > 0
-		// 				? differenceInMonths(currentDate, entryDate)
-		// 				: 0;
-
-		// 		const remainingLife = row. - monthsUsed;
-
-		// 		return (
-		// 			<div className="flex flex-col gap-2">
-		// 				<div>
-		// 					<span className="font-semibold">Meses restantes: </span>{" "}
-		// 					{remainingLife}/{row.usefulLifeMonths}
-		// 				</div>
-		// 				<div>
-		// 					<span className="font-semibold">Fecha de compra: </span>
-		// 					{row.purchaseDate
-		// 						? formatDate(parseDate(row.purchaseDate).toDate("AST"), "P")
-		// 						: "-"}
-		// 				</div>
-		// 			</div>
-		// 		);
-		// 	},
-		// },
-
 		{
-			headerLabel: "Cuenta",
-			selector: (row: AccountingEntry) => row.account?.description,
+			headerLabel: "Fecha de Asiento",
+			selector: (row: AccountingEntry) =>
+				formatDate(parseDate(row.entryDate).toDate("AST"), "P"),
+		},
+		{
+			headerLabel: "Monto",
+			selector: (row: AccountingEntry) => formatCurrency(row.amount),
 		},
 	];
 
 	return (
 		<ScreenLayout>
 			<div className="flex items-center w-full justify-between mb-4">
-				<ScreenTitle>Asientos Contables</ScreenTitle>
+				<ScreenTitle>Registrar Asiento Contable</ScreenTitle>
 			</div>
-			<AppTable
-				columns={columns}
-				isLoading={isFetching}
-				data={accountingEntriesData?.data || []}
-			/>
+			<div className="flex w-full flex-col gap-4 h-full">
+				<AccountingEntryForm />
+				<h2 className="text-lg font-semibold">Asientos Contables</h2>
+				<div>Agregar filtros aca</div>
+				<AppTable
+					columns={columns}
+					isLoading={isFetching}
+					data={accountingEntriesData?.data || []}
+				/>
+			</div>
 		</ScreenLayout>
 	);
 };

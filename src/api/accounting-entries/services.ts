@@ -9,11 +9,11 @@ export const fetchAccountingEntries = async (): Promise<
 	return response.data;
 };
 
-export const executeDepreciationProcess = async (
-	fixedAssetId?: number
-): Promise<ServiceResponse<{ message: string }>> => {
-	const response = await client.post(
-		"/depreciations" + (fixedAssetId ? `?fixedAssetId=${fixedAssetId}` : "")
-	);
+export const saveAccountingEntry = async (
+	payload: Partial<Omit<AccountingEntry, "id">>
+): Promise<ServiceResponse<AccountingEntry>> => {
+	const response = await client.post("/accounting-entries", {
+		...payload,
+	});
 	return response.data;
 };

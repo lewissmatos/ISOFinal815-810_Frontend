@@ -1,15 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { executeDepreciationProcess } from "./services";
+import { saveAccountingEntry } from "./services";
 
-export const useExecuteDepreciationProcess = () => {
+export const useSaveAccountingEntry = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: (fixedAssetId?: number) =>
-			executeDepreciationProcess(fixedAssetId),
+		mutationFn: saveAccountingEntry,
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: ["fixed-assets", "accounting-entries"],
+				queryKey: ["accounting-entries"],
 			});
 		},
 	});

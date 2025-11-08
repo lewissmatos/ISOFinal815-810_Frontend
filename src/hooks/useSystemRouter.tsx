@@ -1,17 +1,16 @@
 import {
-	RiAccountBoxLine,
-	RiBuilding2Line,
+	RiAppsLine,
 	RiCalculatorLine,
-	RiFundsLine,
+	RiFileList2Line,
+	RiHandCoinLine,
 	RiMoneyDollarCircleLine,
 } from "@remixicon/react";
 import type { RemixiconComponentType } from "@remixicon/react";
-import DepartmentsScreen from "../features/departments/departments-screen";
-import EmployeesScreen from "../features/employees/employees-screen";
-
-import TypeOfAssetsScreen from "../features/type-of-assets/type-of-assets-screen";
-import FixedAssetsScreen from "../features/fixed-assets/fixed-assets-screen";
 import AccountingEntriesScreen from "../features/accounting-entries/accounting-entries-screen";
+import AccountTypesScreen from "../features/account-types/account-types-screen";
+import AccountsScreen from "../features/accounts/accounts-screen";
+import AuxiliarySystemsScreen from "../features/auxiliary-systems/auxiliary-systems-screen";
+import CurrenciesScreen from "../features/currencies/currencies-screen";
 export type RouteItem = {
 	label?: string;
 	Icon?: RemixiconComponentType;
@@ -45,28 +44,28 @@ const flattenPaths = (
 const useSystemRouter = () => {
 	const authenticatedPaths: RouteItem[] = [
 		{
-			label: "Departamentos",
-			Icon: RiBuilding2Line,
-			path: "departments",
-			screen: <DepartmentsScreen />,
+			label: "Tipos de Cuentas",
+			Icon: RiHandCoinLine,
+			path: "account-types",
+			screen: <AccountTypesScreen />,
 		},
 		{
-			label: "Tipos de activos",
-			Icon: RiFundsLine,
-			path: "type-of-assets",
-			screen: <TypeOfAssetsScreen />,
+			label: "Cuentas",
+			Icon: RiFileList2Line,
+			path: "accounts",
+			screen: <AccountsScreen />,
 		},
 		{
-			label: "Empleados",
-			Icon: RiAccountBoxLine,
-			path: "employees",
-			screen: <EmployeesScreen />,
+			label: "Sistemas Auxiliares",
+			Icon: RiAppsLine,
+			path: "auxiliary-systems",
+			screen: <AuxiliarySystemsScreen />,
 		},
 		{
-			label: "Activos Fijos",
+			label: "Monedas",
 			Icon: RiMoneyDollarCircleLine,
-			path: "fixed-assets",
-			screen: <FixedAssetsScreen />,
+			path: "currencies",
+			screen: <CurrenciesScreen />,
 		},
 		{
 			label: "Asientos Contables",

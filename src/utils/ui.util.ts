@@ -56,18 +56,11 @@ function generateColorPalette(baseColor: string) {
 	};
 }
 
-export const getRotationDg = (direction?: "up" | "down" | "left" | "right") => {
-	const directions = {
-		up: 180,
-		down: 0,
-		left: 90,
-		right: 270,
-	};
-	return directions[direction ?? "down"] ?? 0;
+const formatCurrency = (value?: number, locale = "es-DO", currency = "DOP") => {
+	if (!value) return "-";
+	return value.toLocaleString(locale, {
+		style: "currency",
+		currency: currency,
+	});
 };
-
-export type RotateIconProps = {
-	direction?: "up" | "down" | "left" | "right";
-};
-
-export { generateColorPalette };
+export { generateColorPalette, formatCurrency };
