@@ -18,7 +18,11 @@ const AccountingEntryForm = () => {
 	const { mutateAsync: onSaveAccountingEntry, isPending: isSaving } =
 		useSaveAccountingEntry();
 	const handleSave: SubmitHandler<Inputs> = async (data) => {
-		await onSaveAccountingEntry(data);
+		await onSaveAccountingEntry({
+			...data,
+			// auxiliaryId: 1,
+			// auxiliary: auxiliarySystemsData?.data.find((type) => type.id === 1),
+		});
 		reset();
 	};
 	return (
@@ -74,14 +78,9 @@ const AccountingEntryForm = () => {
 					labelPlacement="outside"
 					placeholder="Seleccione un sistema auxiliar"
 					isLoading={isFetchingAuxiliarySystems}
-					{...register("auxiliaryId", { required: true })}
-					isRequired
-					disallowEmptySelection
-					selectedKeys={
-						watch("auxiliaryId")
-							? new Set([watch("auxiliaryId")!.toString()])
-							: new Set()
-					}
+					{...register("auxiliaryId")}
+					defaultSelectedKeys={["1"]}
+					isDisabled
 					onSelectionChange={(value) => {
 						const auxiliaryId = [...value][0]?.toString();
 						const auxiliary = auxiliarySystemsData?.data.find(
@@ -94,7 +93,9 @@ const AccountingEntryForm = () => {
 				>
 					{
 						auxiliarySystemsData?.data.map((item) => (
-							<SelectItem key={item.id}>{item.name}</SelectItem>
+							<SelectItem
+								key={item.id}
+							>{`${item.id} - ${item.name}`}</SelectItem>
 						)) as []
 					}
 				</Select>

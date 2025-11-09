@@ -36,12 +36,15 @@ const CurrenciesScreen = () => {
 
 	const columns = [
 		{
-			headerLabel: "Descripción",
+			headerLabel: "id",
 			selector: (row: Currency) => (
-				<span className="font-semibold">{row?.description}</span>
+				<span className="font-semibold">{row?.id}</span>
 			),
 		},
-
+		{
+			headerLabel: "Descripción",
+			selector: (row: Currency) => row?.description,
+		},
 		{
 			headerLabel: "Taza de Cambio",
 			selector: (row: Currency) => (

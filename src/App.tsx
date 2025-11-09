@@ -5,13 +5,19 @@ import AuthenticatedRoutes from "./router/authenticated-routes";
 import UnauthenticatedRoutes from "./router/unauthenticated-routes";
 import { setDefaultOptions } from "date-fns";
 import { es } from "date-fns/locale";
+import { useEffect } from "react";
+import { useAtomValue } from "jotai";
+import { isAuthenticatedAtom } from "./atoms/auth.atom";
 function App() {
-	const isAuthenticated = true;
+	const isAuthenticated = useAtomValue(isAuthenticatedAtom);
 
-	setDefaultOptions({
-		locale: es,
-		weekStartsOn: 1,
-	});
+	useEffect(() => {
+		setDefaultOptions({
+			locale: es,
+			weekStartsOn: 1,
+		});
+	}, []);
+
 	return (
 		<BrowserRouter basename={import.meta.env.VITE_REACT_APP_URL_BASE}>
 			<HeroUIProvider>

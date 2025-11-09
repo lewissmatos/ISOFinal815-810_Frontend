@@ -9,9 +9,8 @@ export const AppAtomsGate = ({ children }: { children: ReactNode }) => {
 
 	useEffect(() => {
 		document.body.className = `app-light text-foreground bg-background`;
-
 		setIsReady(true);
-	}, []);
+	}, [setIsReady]);
 
 	return isReady ? <>{children}</> : null;
 };

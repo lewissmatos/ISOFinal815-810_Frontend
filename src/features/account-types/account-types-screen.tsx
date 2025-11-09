@@ -37,10 +37,14 @@ const AccountTypesScreen = () => {
 
 	const columns = [
 		{
-			headerLabel: "Descripción",
+			headerLabel: "id",
 			selector: (row: AccountType) => (
-				<span className="font-semibold">{row?.description}</span>
+				<span className="font-semibold">{row?.id}</span>
 			),
+		},
+		{
+			headerLabel: "Descripción",
+			selector: (row: AccountType) => row?.description,
 		},
 
 		{

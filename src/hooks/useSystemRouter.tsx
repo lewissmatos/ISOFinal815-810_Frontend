@@ -92,7 +92,7 @@ const useSystemRouter = () => {
 			}));
 
 	const getHomePath = (): string => {
-		return "departments";
+		return "account-types";
 	};
 
 	return { getRoutes, getHeaderItems, getHomePath };

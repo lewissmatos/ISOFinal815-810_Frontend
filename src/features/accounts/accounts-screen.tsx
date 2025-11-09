@@ -36,10 +36,14 @@ const AccountsScreen = () => {
 
 	const columns = [
 		{
-			headerLabel: "Descripción",
+			headerLabel: "id",
 			selector: (row: Account) => (
-				<span className="font-semibold">{row?.description}</span>
+				<span className="font-semibold">{row?.id}</span>
 			),
+		},
+		{
+			headerLabel: "Descripción",
+			selector: (row: Account) => row?.description,
 		},
 		{
 			headerLabel: "Permite Transacciones",

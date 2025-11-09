@@ -37,10 +37,14 @@ const AuxiliarySystemsScreen = () => {
 
 	const columns = [
 		{
-			headerLabel: "Nombre",
+			headerLabel: "id",
 			selector: (row: AuxiliarySystem) => (
-				<span className="font-semibold">{row?.name}</span>
+				<span className="font-semibold">{row?.id}</span>
 			),
+		},
+		{
+			headerLabel: "Nombre",
+			selector: (row: AuxiliarySystem) => row?.name,
 		},
 		{
 			headerLabel: "Estado",
