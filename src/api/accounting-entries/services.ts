@@ -1,11 +1,15 @@
 import client from "../client";
 import type { ServiceResponse } from "../types";
-import type { AccountingEntry } from "./types";
+import type { AccountingEntry, FetchAccountingEntriesFilter } from "./types";
 
-export const fetchAccountingEntries = async (): Promise<
-	ServiceResponse<AccountingEntry[]>
-> => {
-	const response = await client.get("/accounting-entries");
+export const fetchAccountingEntries = async (
+	params?: FetchAccountingEntriesFilter
+): Promise<ServiceResponse<AccountingEntry[]>> => {
+	const response = await client.get("/accounting-entries", {
+		params: {
+			...params,
+		},
+	});
 	return response.data;
 };
 

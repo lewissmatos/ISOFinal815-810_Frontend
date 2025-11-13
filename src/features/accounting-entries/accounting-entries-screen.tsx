@@ -2,23 +2,54 @@ import { ScreenLayout } from "../../components/ui/screen-layout";
 import ScreenTitle from "../../components/ui/screen-title";
 import AppTable from "../../components/ui/app-table";
 import { useFetchAccountingEntries } from "../../api/accounting-entries/queries";
-import type { AccountingEntry } from "../../api/accounting-entries/types";
+import type {
+	AccountingEntry,
+	FetchAccountingEntriesFilter,
+} from "../../api/accounting-entries/types";
 import { formatDate } from "date-fns";
 import { parseDate } from "@internationalized/date";
 import { formatCurrency } from "../../utils/ui.util";
 import AccountingEntryForm from "./accounting-entry-form";
 import { Accordion, AccordionItem } from "@heroui/react";
+import { useState } from "react";
+import AccountingEntriesFilters from "./accounting-entries-filters";
 
 const AccountingEntriesScreen = () => {
+	const [filters, setFilters] = useState<FetchAccountingEntriesFilter>({
+		accountId: undefined,
+		auxiliaryId: undefined,
+		description: undefined,
+		movementType: undefined,
+		startDate: undefined,
+		endDate: undefined,
+	});
+
+	const handleUpdateFilters = ({
+		name,
+		value,
+	}: {
+		name: keyof FetchAccountingEntriesFilter;
+		value: string | number | undefined;
+	}) => {
+		setFilters((prev) => ({
+			...prev,
+			[name]: value,
+		}));
+	};
+
 	const { data: accountingEntriesData, isFetching } =
-		useFetchAccountingEntries();
+		useFetchAccountingEntries(filters);
 
 	const columns = [
 		{
-			headerLabel: "Descripción",
+			headerLabel: "No. Asiento",
 			selector: (row: AccountingEntry) => (
-				<span className="capitalize font-semibold">{row.description}</span>
+				<span className="capitalize font-semibold">{`#${row.id}`}</span>
 			),
+		},
+		{
+			headerLabel: "Descripción",
+			selector: (row: AccountingEntry) => row.description,
 		},
 		{
 			headerLabel: "Sistema Auxiliar",
@@ -51,7 +82,10 @@ const AccountingEntriesScreen = () => {
 			<div className="flex w-full flex-col gap-4 h-full">
 				<AccountingEntryForm />
 				<h2 className="text-lg font-semibold">Asientos Contables</h2>
-				<div>*Agregar filtros*</div>
+				<AccountingEntriesFilters
+					filters={filters}
+					onUpdateFilters={handleUpdateFilters}
+				/>
 				<Accordion variant="splitted" defaultExpandedKeys={"all"}>
 					<AccordionItem title="Lista de Asientos Contables">
 						<AppTable

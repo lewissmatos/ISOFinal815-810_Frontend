@@ -32,8 +32,6 @@ const AccountForm = ({
 	const { data: accountsData, isFetching: isFetchingAccounts } =
 		useFetchAccounts();
 
-	console.log(accountsData);
-
 	useEffect(() => {
 		reset({
 			description: accountToEdit?.description || "",

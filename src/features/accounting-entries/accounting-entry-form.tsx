@@ -37,8 +37,10 @@ const AccountingEntryForm = () => {
 						return "Por favor introduzca la descripción";
 					}
 				}}
-				{...register("description", { required: true })}
+				{...register("description", { required: true, minLength: 40 })}
 				label="Descripción"
+				minLength={100}
+				className="max-w-1/3"
 				labelPlacement="outside-top"
 			/>
 			<div className="flex justify-between gap-4">

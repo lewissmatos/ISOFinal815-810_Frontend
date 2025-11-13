@@ -15,4 +15,12 @@ type AccountingEntry = Base<{
 	status: string;
 }>;
 
-export type { AccountingEntry };
+type FetchAccountingEntriesFilter = {
+	description?: string;
+	auxiliaryId?: number;
+	accountId?: number;
+	movementType?: "DB" | "CR";
+	startDate?: string;
+	endDate?: string;
+};
+export type { AccountingEntry, FetchAccountingEntriesFilter };
