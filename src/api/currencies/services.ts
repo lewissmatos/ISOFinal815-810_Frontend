@@ -48,3 +48,15 @@ export const toggleCurrencyStatus = async (
 	const response = await client.patch(`/currencies/${currencyId}/toggle`);
 	return response.data;
 };
+
+export const syncCurrencies = async (): Promise<ServiceResponse<null>> => {
+	const response = await client.get("/currencies/sync");
+	return response.data;
+};
+
+export const syncCurrency = async (
+	id: number
+): Promise<ServiceResponse<null>> => {
+	const response = await client.get("/currencies/sync/" + id);
+	return response.data;
+};

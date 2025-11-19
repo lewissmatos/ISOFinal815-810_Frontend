@@ -1,7 +1,16 @@
-import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
+import {
+	useMutation,
+	useQuery,
+	type UseQueryOptions,
+} from "@tanstack/react-query";
 import type { ServiceResponse } from "../types";
 import type { Currency } from "./types";
-import { fetchActiveCurrencies, fetchCurrencies } from "./services";
+import {
+	fetchActiveCurrencies,
+	fetchCurrencies,
+	syncCurrencies,
+	syncCurrency,
+} from "./services";
 
 export const useFetchCurrencies = (
 	options?: Partial<UseQueryOptions> & { showInactive?: boolean }
@@ -13,4 +22,18 @@ export const useFetchCurrencies = (
 		enabled: Boolean(enabled),
 	});
 	return data;
+};
+
+export const useSyncCurrencies = () => {
+	return useMutation({
+		mutationKey: ["currencies-sync", "sync"],
+		mutationFn: () => syncCurrencies(),
+	});
+};
+
+export const useSyncCurrency = () => {
+	return useMutation({
+		mutationKey: ["currencies-sync", "sync-single"],
+		mutationFn: syncCurrency,
+	});
 };

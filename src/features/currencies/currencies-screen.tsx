@@ -7,12 +7,17 @@ import {
 	RiCheckboxCircleLine,
 	RiEditLine,
 	RiForbidLine,
+	RiRefreshLine,
 } from "@remixicon/react";
 import { useState } from "react";
 import DeleteButton from "../../components/ui/delete-button";
 import AppTable from "../../components/ui/app-table";
 import type { Currency } from "../../api/currencies/types";
-import { useFetchCurrencies } from "../../api/currencies/queries";
+import {
+	useFetchCurrencies,
+	useSyncCurrencies,
+	useSyncCurrency,
+} from "../../api/currencies/queries";
 import {
 	useDeleteCurrency,
 	useToggleCurrenciesStatus,
@@ -20,7 +25,18 @@ import {
 import { formatCurrency } from "../../utils/ui.util";
 
 const CurrenciesScreen = () => {
-	const { data: currenciesData, isFetching } = useFetchCurrencies();
+	const {
+		data: currenciesData,
+		isFetching,
+		refetch: refetchCurrencies,
+	} = useFetchCurrencies();
+
+	const { mutateAsync: onSyncCurrencies, isPending: isSyncing } =
+		useSyncCurrencies();
+
+	const { mutateAsync: onSyncCurrency, isPending: isSyncingSingle } =
+		useSyncCurrency();
+
 	const { isOpen, onOpenChange, onClose } = useDisclosure();
 
 	const [currencyToEdit, setCurrencyToEdit] = useState<Currency | null>(null);
@@ -34,11 +50,19 @@ const CurrenciesScreen = () => {
 		useToggleCurrenciesStatus();
 	const { mutateAsync: onDelete, isPending: isDeleting } = useDeleteCurrency();
 
+	const handleSyncCurrencies = async () => {
+		await onSyncCurrencies(undefined, { onSuccess: () => refetchCurrencies() });
+	};
+
+	const handleSyncCurrency = async (id: number) => {
+		await onSyncCurrency(id, { onSuccess: () => refetchCurrencies() });
+	};
+
 	const columns = [
 		{
-			headerLabel: "id",
+			headerLabel: "Código",
 			selector: (row: Currency) => (
-				<span className="font-semibold">{row?.id}</span>
+				<span className="font-semibold">{row?.ISOCode}</span>
 			),
 		},
 		{
@@ -61,6 +85,16 @@ const CurrenciesScreen = () => {
 			headerLabel: "Acciones",
 			selector: (row: Currency) => (
 				<div className="flex gap-2">
+					<Button
+						isIconOnly
+						size="sm"
+						variant="light"
+						color="primary"
+						isLoading={isSyncingSingle}
+						onPress={() => handleSyncCurrency(row.id)}
+					>
+						<RiRefreshLine size={18} />
+					</Button>
 					<Button
 						isIconOnly
 						size="sm"
@@ -100,15 +134,27 @@ const CurrenciesScreen = () => {
 		<ScreenLayout>
 			<div className="flex items-center w-full justify-between mb-4">
 				<ScreenTitle>Monedas</ScreenTitle>
-				<CurrencyForm
-					currencyToEdit={currencyToEdit}
-					isOpen={isOpen}
-					onClose={() => {
-						setCurrencyToEdit(null);
-						onClose();
-					}}
-					onOpenChange={onOpenChange}
-				/>
+				<div className="flex items-center justify-between gap-2">
+					<Button
+						isIconOnly
+						size="sm"
+						variant="light"
+						color="primary"
+						isLoading={isSyncing}
+						onPress={handleSyncCurrencies}
+					>
+						<RiRefreshLine />
+					</Button>
+					<CurrencyForm
+						currencyToEdit={currencyToEdit}
+						isOpen={isOpen}
+						onClose={() => {
+							setCurrencyToEdit(null);
+							onClose();
+						}}
+						onOpenChange={onOpenChange}
+					/>
+				</div>
 			</div>
 			<AppTable
 				columns={columns}

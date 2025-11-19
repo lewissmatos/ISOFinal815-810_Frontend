@@ -17,7 +17,11 @@ export const saveAccountingEntry = async (
 	payload: Partial<Omit<AccountingEntry, "id">>
 ): Promise<ServiceResponse<AccountingEntry>> => {
 	const response = await client.post("/accounting-entries", {
-		...payload,
+		description: payload.description,
+		accountId: Number(payload.accountId),
+		auxiliaryId: Number(payload.auxiliaryId),
+		movementType: payload.movementType,
+		amount: payload.amount,
 	});
 	return response.data;
 };

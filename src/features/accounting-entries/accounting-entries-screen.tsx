@@ -10,9 +10,9 @@ import { formatDate } from "date-fns";
 import { parseDate } from "@internationalized/date";
 import { formatCurrency } from "../../utils/ui.util";
 import AccountingEntryForm from "./accounting-entry-form";
-import { Accordion, AccordionItem } from "@heroui/react";
 import { useState } from "react";
 import AccountingEntriesFilters from "./accounting-entries-filters";
+import { Divider } from "@heroui/react";
 
 const AccountingEntriesScreen = () => {
 	const [filters, setFilters] = useState<FetchAccountingEntriesFilter>({
@@ -81,20 +81,17 @@ const AccountingEntriesScreen = () => {
 			</div>
 			<div className="flex w-full flex-col gap-4 h-full">
 				<AccountingEntryForm />
+				<Divider />
 				<h2 className="text-lg font-semibold">Asientos Contables</h2>
 				<AccountingEntriesFilters
 					filters={filters}
 					onUpdateFilters={handleUpdateFilters}
 				/>
-				<Accordion variant="splitted" defaultExpandedKeys={"all"}>
-					<AccordionItem title="Lista de Asientos Contables">
-						<AppTable
-							columns={columns}
-							isLoading={isFetching}
-							data={accountingEntriesData?.data || []}
-						/>
-					</AccordionItem>
-				</Accordion>
+				<AppTable
+					columns={columns}
+					isLoading={isFetching}
+					data={accountingEntriesData?.data || []}
+				/>
 			</div>
 		</ScreenLayout>
 	);
