@@ -54,8 +54,8 @@ const CurrenciesScreen = () => {
 		await onSyncCurrencies(undefined, { onSuccess: () => refetchCurrencies() });
 	};
 
-	const handleSyncCurrency = async (id: number) => {
-		await onSyncCurrency(id, { onSuccess: () => refetchCurrencies() });
+	const handleSyncCurrency = async (code: string) => {
+		await onSyncCurrency(code, { onSuccess: () => refetchCurrencies() });
 	};
 
 	const columns = [
@@ -91,7 +91,7 @@ const CurrenciesScreen = () => {
 						variant="light"
 						color="primary"
 						isDisabled={isSyncingSingle}
-						onPress={() => handleSyncCurrency(row.id)}
+						onPress={() => handleSyncCurrency(row.ISOCode)}
 					>
 						<RiRefreshLine size={18} />
 					</Button>

@@ -9,7 +9,7 @@ import {
 	fetchActiveCurrencies,
 	fetchCurrencies,
 	syncCurrencies,
-	syncCurrency,
+	updateCurrencyRate,
 } from "./services";
 
 export const useFetchCurrencies = (
@@ -34,6 +34,9 @@ export const useSyncCurrencies = () => {
 export const useSyncCurrency = () => {
 	return useMutation({
 		mutationKey: ["currencies-sync", "sync-single"],
-		mutationFn: syncCurrency,
+		mutationFn: async (code: string) => {
+			const response = await updateCurrencyRate(code);
+			return response;
+		},
 	});
 };
