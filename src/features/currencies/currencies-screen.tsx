@@ -27,7 +27,7 @@ import { formatCurrency } from "../../utils/ui.util";
 const CurrenciesScreen = () => {
 	const {
 		data: currenciesData,
-		isFetching,
+		isLoading,
 		refetch: refetchCurrencies,
 	} = useFetchCurrencies();
 
@@ -90,7 +90,7 @@ const CurrenciesScreen = () => {
 						size="sm"
 						variant="light"
 						color="primary"
-						isLoading={isSyncingSingle}
+						isDisabled={isSyncingSingle}
 						onPress={() => handleSyncCurrency(row.id)}
 					>
 						<RiRefreshLine size={18} />
@@ -111,7 +111,7 @@ const CurrenciesScreen = () => {
 						onPress={() => {
 							onToggleStatus(row.id);
 						}}
-						isLoading={isToggling || isFetching}
+						isLoading={isToggling || isLoading}
 					>
 						{row.isActive ? (
 							<RiForbidLine size={18} className="text-danger-500" />
@@ -123,7 +123,7 @@ const CurrenciesScreen = () => {
 						onConfirm={() => {
 							onDelete(row.id);
 						}}
-						isLoading={isDeleting || isFetching}
+						isLoading={isDeleting || isLoading}
 					/>
 				</div>
 			),
@@ -158,7 +158,7 @@ const CurrenciesScreen = () => {
 			</div>
 			<AppTable
 				columns={columns}
-				isLoading={isFetching}
+				isLoading={isLoading}
 				data={currenciesData?.data || []}
 			/>
 		</ScreenLayout>
