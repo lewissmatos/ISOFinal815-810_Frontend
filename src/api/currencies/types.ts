@@ -6,4 +6,9 @@ type Currency = Base<{
 	exchangeRate: number;
 }>;
 
-export type { Currency };
+type UpdateCurrencyRate = {
+	code: string;
+	rate: number;
+};
+
+export type { Currency, UpdateCurrencyRate };
